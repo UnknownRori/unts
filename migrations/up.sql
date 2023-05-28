@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS notes (
+    uuid VARCHAR(255) PRIMARY KEY NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL created_at DATETIME NOT NULL,
+);
