@@ -5,5 +5,6 @@ async fn test_db_create_instance() {
 
     let config = Config::default();
 
-    let _ = Database::new(&config).await.unwrap();
+    let db = Database::new(&config).await.unwrap();
+    let _ = db.get_conn().await.unwrap();
 }

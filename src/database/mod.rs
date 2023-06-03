@@ -8,9 +8,10 @@ use crate::config::Config;
 
 use self::error::DatabaseError;
 
+#[derive(Debug)]
 pub struct Database {
     pool: MySqlPool,
-    conn: PoolConnection<MySql>,
+    connection_url: String,
 }
 
 impl Database {
@@ -21,11 +22,13 @@ impl Database {
             .await
             .map_err(|_| DatabaseError::new(connection_url.to_owned()))?;
 
-        let conn = pool
+        Ok(Database { pool, connection_url: connection_url.to_owned() })
+    }
+
+    pub async fn get_conn(&self) -> Result<PoolConnection<MySql>, DatabaseError> {
+        self.pool
             .acquire()
             .await
-            .map_err(|_| DatabaseError::new(connection_url.to_owned()))?;
-
-        Ok(Database { pool, conn })
+            .map_err(|_| DatabaseError::new(self.connection_url.to_owned()))
     }
 }
