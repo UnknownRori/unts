@@ -1,6 +1,6 @@
 use directories::ProjectDirs;
 
-use crate::{config::Config, args::Args, database::Database};
+use crate::{args::Args, config::Config, database::Database};
 
 #[derive(Debug)]
 pub struct Application {
