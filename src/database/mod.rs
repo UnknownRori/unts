@@ -22,7 +22,10 @@ impl Database {
             .await
             .map_err(|_| DatabaseError::new(connection_url.to_owned()))?;
 
-        Ok(Database { pool, connection_url: connection_url.to_owned() })
+        Ok(Database {
+            pool,
+            connection_url: connection_url.to_owned(),
+        })
     }
 
     pub async fn get_conn(&self) -> Result<PoolConnection<MySql>, DatabaseError> {
