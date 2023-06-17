@@ -73,4 +73,12 @@ impl NotesSqlx {
 
         Ok(())
     }
+
+    pub async fn delete(self, conn: &mut PoolConnection<MySql>) -> Result<(), sqlx::Error> {
+        let _ = sqlx::query_as!(NotesSqlx, "DELETE FROM notes WHERE uuid=?", self.uuid)
+            .execute(conn)
+            .await?;
+
+        Ok(())
+    }
 }
