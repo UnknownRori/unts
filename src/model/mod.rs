@@ -32,7 +32,12 @@ impl From<Notes> for NotesSqlx {
 }
 
 impl NotesSqlx {
-    pub fn new(uuid: String, title: String, content: String, created_at: NaiveDateTime) -> NotesSqlx {
+    pub fn new(
+        uuid: String,
+        title: String,
+        content: String,
+        created_at: NaiveDateTime,
+    ) -> NotesSqlx {
         NotesSqlx {
             uuid,
             title,
@@ -41,15 +46,30 @@ impl NotesSqlx {
         }
     }
 
-    pub async fn find(uuid: &String, conn: &mut PoolConnection<MySql>) -> Result<NotesSqlx, sqlx::Error> {
-        sqlx::query_as!(NotesSqlx, "SELECT * FROM notes WHERE uuid=?", uuid).fetch_one(conn).await
+    pub async fn find(
+        uuid: &String,
+        conn: &mut PoolConnection<MySql>,
+    ) -> Result<NotesSqlx, sqlx::Error> {
+        sqlx::query_as!(NotesSqlx, "SELECT * FROM notes WHERE uuid=?", uuid)
+            .fetch_one(conn)
+            .await
     }
 
     pub async fn upsert(&self, conn: &mut PoolConnection<MySql>) -> Result<(), sqlx::Error> {
-        let _ = sqlx::query_as!(NotesSqlx, "
+        let _ = sqlx::query_as!(
+            NotesSqlx,
+            "
             INSERT INTO notes (uuid, title, content, created_at) VALUES (?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE uuid=?
-        ", self.uuid, self.title, self.content, self.created_at, self.uuid).execute(conn).await?;
+        ",
+            self.uuid,
+            self.title,
+            self.content,
+            self.created_at,
+            self.uuid
+        )
+        .execute(conn)
+        .await?;
 
         Ok(())
     }
