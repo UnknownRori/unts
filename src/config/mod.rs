@@ -1,18 +1,18 @@
-use std::env;
+use std::{env, sync::Arc};
 
 use dotenv::dotenv;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
-    database_url: String,
+    database_url: Arc<str>,
 }
 
 impl Default for Config {
     fn default() -> Self {
         dotenv().ok();
         Self {
-            database_url: env::var("DATABASE_URL").unwrap(),
+            database_url: env::var("DATABASE_URL").unwrap().into(),
         }
     }
 }
