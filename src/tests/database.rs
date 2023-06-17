@@ -43,3 +43,26 @@ async fn test_upsert_1() {
     assert_eq!(note.content, note2.content);
     // assert_eq!(note.created_at, note2.created_at); // Note: Should this be included on the test?
 }
+
+
+#[cfg(test)]
+#[tokio::test]
+async fn test_delete_1() {
+    use chrono::Utc;
+
+    use crate::{model::NotesSqlx, utility::generate_uuid};
+    let db = setup_db().await;
+    let mut conn = db.get_conn().await.unwrap();
+
+    let date = Utc::now().naive_utc();
+    let uuid = generate_uuid().to_string();
+    let note = NotesSqlx::new(
+        uuid.to_owned(),
+        "Hello, world!".to_owned(),
+        "Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.".to_owned(),
+        date
+    );
+
+    note.delete(&mut conn).await.unwrap();
+    assert!(NotesSqlx::find(&uuid, &mut conn).await.is_err());
+}
