@@ -22,7 +22,7 @@ impl<'a> Config {
         todo!();
     }
 
-    pub fn get_database_url(&'a self) -> &'a str {
+    pub fn get_database_url(&'a self) -> &Arc<str> {
         &self.database_url
     }
 }
