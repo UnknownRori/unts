@@ -26,7 +26,7 @@ impl Database {
 
         Ok(Database {
             pool,
-            connection_url
+            connection_url,
         })
     }
 
