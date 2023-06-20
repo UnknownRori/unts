@@ -38,6 +38,8 @@ impl Database {
             .map_err(|_| DatabaseError::new((*self.connection_url).to_owned()))
     }
 
+    /// INFO : For future use
+    #[allow(dead_code)]
     pub async fn get_transaction(&self) -> Result<Transaction<MySql>, DatabaseError> {
         self.pool
             .begin()
