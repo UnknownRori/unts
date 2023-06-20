@@ -47,9 +47,9 @@ impl NotesSqlx {
     }
 
     pub async fn all(conn: &mut PoolConnection<MySql>) -> Result<Vec<NotesSqlx>, sqlx::Error> {
-    Ok(sqlx::query_as!(NotesSqlx, "SELECT * FROM notes")
-        .fetch_all(conn)
-        .await?)
+        Ok(sqlx::query_as!(NotesSqlx, "SELECT * FROM notes")
+            .fetch_all(conn)
+            .await?)
     }
 
     pub async fn find(
