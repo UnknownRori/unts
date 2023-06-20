@@ -2,6 +2,7 @@ pub mod error;
 
 use std::sync::Arc;
 
+use sqlx::Transaction;
 use sqlx::pool::PoolConnection;
 use sqlx::MySql;
 use sqlx::MySqlPool;
@@ -33,6 +34,13 @@ impl Database {
     pub async fn get_conn(&self) -> Result<PoolConnection<MySql>, DatabaseError> {
         self.pool
             .acquire()
+            .await
+            .map_err(|_| DatabaseError::new((*self.connection_url).to_owned()))
+    }
+
+    pub async fn get_transaction(&self) -> Result<Transaction<MySql>, DatabaseError> {
+        self.pool
+            .begin()
             .await
             .map_err(|_| DatabaseError::new((*self.connection_url).to_owned()))
     }
