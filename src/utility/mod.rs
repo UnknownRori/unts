@@ -9,3 +9,15 @@ pub fn project_dir() -> Option<directories::ProjectDirs> {
 pub fn generate_uuid() -> Uuid {
     uuid::Uuid::new_v4()
 }
+
+#[cfg(target_family = "windows")]
+#[inline]
+pub fn seperator() -> char {
+    '\\'
+}
+
+#[cfg(target_family = "unix")]
+#[inline]
+pub fn seperator() -> char {
+    '/'
+}
